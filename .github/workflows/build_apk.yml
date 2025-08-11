@@ -185,6 +185,14 @@ jobs:
       with:
         api-level: 30
         build-tools: 30.0.3
+
+    - name: Install Android SDK packages (including aidl)
+      run: |
+        yes | sdkmanager --licenses
+        sdkmanager "platform-tools" \
+                   "platforms;android-30" \
+                   "build-tools;30.0.3" \
+                   "cmdline-tools;latest"
         
     - name: Restore buildozer cache
       uses: actions/cache@v3
