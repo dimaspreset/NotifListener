@@ -36,7 +36,7 @@ android.gradle = 7.1.1
 android.add_java_dir = java
 
 # Use custom AndroidManifest template
-android.manifest_template = templates/AndroidManifest.tmpl.xml
+android.manifest_template = templates\AndroidManifest.tmpl.xml
 
 # Architecture (optimized for most devices)
 android.archs = arm64-v8a, armeabi-v7a

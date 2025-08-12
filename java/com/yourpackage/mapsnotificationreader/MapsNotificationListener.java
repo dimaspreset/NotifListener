@@ -1,4 +1,4 @@
-package com.yourpackage.notificationreader;
+package com.yourpackage.mapsnotificationreader;
 
 import android.app.Notification;
 import android.content.Context;
