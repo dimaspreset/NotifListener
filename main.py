@@ -160,9 +160,10 @@ class NotificationReaderApp(App):
             
             # Create intent untuk NotificationListenerService
             intent = Intent()
+            # PERBAIKAN: Gunakan package name yang benar
             intent.setClassName(
                 activity.getPackageName(),
-                "com.yourpackage.notificationreader.MapsNotificationListener"
+                "com.yourpackage.mapsnotificationreader.MapsNotificationListener"
             )
             
             # Start service
@@ -199,9 +200,11 @@ class NotificationReaderApp(App):
             
             if enabled_listeners and package_name in enabled_listeners:
                 Logger.info("Notification access is granted")
+                self.status_label.text = 'Status: Notification access granted!'
                 return True
             else:
                 Logger.warning("Notification access not granted")
+                self.status_label.text = 'Status: Please grant notification access in Settings'
                 return False
                 
         except Exception as e:

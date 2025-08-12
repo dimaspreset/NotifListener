@@ -41,8 +41,11 @@ android.manifest_template = templates/AndroidManifest.tmpl.xml
 # Architecture (optimized for most devices)
 android.archs = arm64-v8a, armeabi-v7a
 
-# Service declarations
-android.add_activities = com.yourpackage.notificationreader.MapsNotificationListener
+# PERBAIKAN: Hapus baris ini yang salah
+# android.add_activities = com.yourpackage.notificationreader.MapsNotificationListener
+
+# Tambahkan service dengan benar
+android.add_services = com.yourpackage.mapsnotificationreader.MapsNotificationListener
 
 # Debug settings
 android.debug = 1

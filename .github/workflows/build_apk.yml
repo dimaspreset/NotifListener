@@ -40,6 +40,12 @@ jobs:
             buildozer-local-${{ runner.os }}-${{ steps.get-date.outputs.date }}-
             buildozer-local-${{ runner.os }}-
 
+      - name: Clean Buildozer
+        uses: ArtemSBulgakov/buildozer-action@v1
+        with:
+          command: buildozer android clean
+          buildozer_version: stable
+
       - name: Build with Buildozer
         uses: ArtemSBulgakov/buildozer-action@v1
         id: buildozer
