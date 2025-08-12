@@ -85,8 +85,16 @@ class NotificationReaderApp(App):
         scroll.add_widget(self.data_label)
         main_layout.add_widget(scroll)
         
-        # File path untuk menyimpan data
-        self.data_file = os.path.join(self.user_data_dir, 'notification_data.json')
+        # File path untuk menyimpan data - gunakan internal storage
+        if ANDROID_AVAILABLE:
+            # Android: gunakan files directory yang sama dengan Java service
+            from android import mActivity
+            context = mActivity.getApplicationContext()
+            files_dir = context.getFilesDir().getAbsolutePath()
+            self.data_file = os.path.join(files_dir, 'notification_data.json')
+        else:
+            # Desktop: gunakan user data dir
+            self.data_file = os.path.join(self.user_data_dir, 'notification_data.json')
         
         # Schedule untuk membaca data
         self.read_event = None
@@ -138,23 +146,67 @@ class NotificationReaderApp(App):
     def start_notification_service(self):
         """Start the Java notification service"""
         if not ANDROID_AVAILABLE:
+            Logger.info("Android not available - service not started")
             return
             
         try:
-            # Get Python activity
+            # Import Android classes
             PythonActivity = autoclass('org.kivy.android.PythonActivity')
+            Intent = autoclass('android.content.Intent')
+            Context = autoclass('android.content.Context')
+            
+            # Get current activity
             activity = PythonActivity.mActivity
             
-            # Start service menggunakan intent
-            Intent = autoclass('android.content.Intent')
+            # Create intent untuk NotificationListenerService
             intent = Intent()
-            intent.setAction('android.service.notification.NotificationListenerService')
+            intent.setClassName(
+                activity.getPackageName(),
+                "com.yourpackage.notificationreader.MapsNotificationListener"
+            )
             
-            # Untuk development, kita akan menggunakan file-based communication
-            Logger.info("Notification service communication setup complete")
+            # Start service
+            try:
+                activity.startService(intent)
+                Logger.info("Notification service started successfully")
+            except Exception as e:
+                Logger.warning(f"Could not start service directly: {e}")
+                Logger.info("Service will be activated when notification access is granted")
+                
+            # Periksa apakah notification access sudah diaktifkan
+            self.check_notification_access()
             
         except Exception as e:
             Logger.error(f"Error starting notification service: {e}")
+            
+    def check_notification_access(self):
+        """Check if notification access is granted"""
+        try:
+            if not ANDROID_AVAILABLE:
+                return
+                
+            PythonActivity = autoclass('org.kivy.android.PythonActivity')
+            Settings = autoclass('android.provider.Settings')
+            
+            activity = PythonActivity.mActivity
+            package_name = activity.getPackageName()
+            
+            # Check notification access
+            enabled_listeners = Settings.Secure.getString(
+                activity.getContentResolver(),
+                "enabled_notification_listeners"
+            )
+            
+            if enabled_listeners and package_name in enabled_listeners:
+                Logger.info("Notification access is granted")
+                return True
+            else:
+                Logger.warning("Notification access not granted")
+                return False
+                
+        except Exception as e:
+            Logger.error(f"Error checking notification access: {e}")
+            return False
     
     def read_notification_data(self, dt):
         """Read notification data from file"""

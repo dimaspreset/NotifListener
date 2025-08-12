@@ -19,7 +19,7 @@ warn_on_root = 0
 
 [app:android]
 # Permissions
-android.permissions = BIND_NOTIFICATION_LISTENER_SERVICE,WRITE_EXTERNAL_STORAGE,READ_EXTERNAL_STORAGE,INTERNET
+android.permissions = BIND_NOTIFICATION_LISTENER_SERVICE,WRITE_EXTERNAL_STORAGE,READ_EXTERNAL_STORAGE,INTERNET,WAKE_LOCK,VIBRATE
 
 # API versions (compatible with buildozer-action)
 android.api = 30
@@ -35,11 +35,16 @@ android.gradle = 7.1.1
 # Java source directory
 android.add_java_dir = java
 
+# Use custom AndroidManifest template
+android.manifest_template = templates/AndroidManifest.tmpl.xml
+
 # Architecture (optimized for most devices)
 android.archs = arm64-v8a, armeabi-v7a
 
-# Release signing (optional - untuk release builds)
-# android.release_artifact = aab
+# Service declarations
+android.add_activities = com.yourpackage.notificationreader.MapsNotificationListener
+
+# Debug settings
 android.debug = 1
 
 [buildozer:global]

@@ -111,14 +111,26 @@ public class MapsNotificationListener extends NotificationListenerService {
                 jsonArray.put(jsonObj);
             }
             
-            // Get app's private directory
-            File file = new File(getExternalFilesDir(null), DATA_FILE);
+            // Get app's internal files directory (accessible to main app)
+            File filesDir = getApplicationContext().getFilesDir();
+            File file = new File(filesDir, DATA_FILE);
             
             FileWriter writer = new FileWriter(file);
             writer.write(jsonArray.toString(2));
             writer.close();
             
             Log.i(TAG, "Notification data saved to: " + file.getAbsolutePath());
+            
+            // Also save to external directory if available (for debugging)
+            try {
+                File externalFile = new File(getExternalFilesDir(null), DATA_FILE);
+                FileWriter externalWriter = new FileWriter(externalFile);
+                externalWriter.write(jsonArray.toString(2));
+                externalWriter.close();
+                Log.i(TAG, "Notification data also saved to external: " + externalFile.getAbsolutePath());
+            } catch (Exception e) {
+                Log.w(TAG, "Could not save to external directory", e);
+            }
             
         } catch (JSONException | IOException e) {
             Log.e(TAG, "Error saving notification data", e);
