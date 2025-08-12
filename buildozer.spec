@@ -23,7 +23,7 @@ android.permissions = BIND_NOTIFICATION_LISTENER_SERVICE,WRITE_EXTERNAL_STORAGE,
 
 # API versions (compatible with buildozer-action)
 android.api = 30
-android.minapi = 21
+android.minapi = 24
 android.ndk = 23b
 android.sdk = 30
 
@@ -46,6 +46,9 @@ android.archs = arm64-v8a, armeabi-v7a
 
 # Tambahkan service dengan benar
 android.add_services = com.yourpackage.mapsnotificationreader.MapsNotificationListener
+
+android.release_artifact = apk
+
 
 # Debug settings
 android.debug = 1
