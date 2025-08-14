@@ -2,14 +2,14 @@
 # Nama aplikasi
 title = CuyBotApp
 package.name = cuybot
-package.domain = com
+package.domain = com.cuybot
 
 # Versi aplikasi
 version = 0.1
 
 # File utama Python kamu
 source.dir = .
-source.include_exts = py,png,jpg,kv,atlas
+source.include_exts = py,png,jpg,kv,atlas,json
 
 # Entry point
 main.py = main.py
@@ -17,41 +17,41 @@ main.py = main.py
 # Icon (opsional)
 #icon.filename = %(source.dir)s/data/icon.png
 
-# Requirements
-requirements = python3,kivy,kivymd,pyjnius,android
-android.api = 33
-android.minapi = 24
+# Requirements - Fixed versions for compatibility
+requirements = python3,kivy==2.1.0,kivymd==1.1.1,pyjnius,android,requests,certifi
+
+# Android settings - More compatible versions
+android.api = 31
+android.minapi = 21
 android.ndk = 25b
 android.enable_androidx = True
+android.accept_sdk_license = True
 
-# Firebase (opsional, kalau mau tetap nyimpen ke Firebase)
-android.gradle_dependencies = com.google.firebase:firebase-database:20.3.0
+# Firebase dependencies - Fixed format
+android.gradle_dependencies = com.google.firebase:firebase-database:20.2.2, com.google.firebase:firebase-core:21.1.1
+android.gradle_plugins = com.google.gms.google-services
 
-# Tambahkan Java dan manifest custom
+# Custom Java code and manifest
 android.add_src = ./android
-android.manifest_xml = ./android/AndroidManifest.xml
+android.add_jars = ./android/libs/*.jar
+
+# Permissions - Complete list
+android.permissions = INTERNET,BIND_NOTIFICATION_LISTENER_SERVICE,RECEIVE_BOOT_COMPLETED,WAKE_LOCK,FOREGROUND_SERVICE,ACCESS_NETWORK_STATE
 
 # Orientasi layar
 orientation = portrait
 
-# Presplash screen (opsional)
-#presplash.filename = %(source.dir)s/data/presplash.png
-
-# Jangan optimasi Python agar tetap kompatibel
-# (supaya Pyjnius dan service Java aman)
-android.compile_options = "sourceCompatibility=1.8,targetCompatibility=1.8"
-
-# Permissions (opsional tambahan selain manifest)
-android.permissions = INTERNET,RECEIVE_BOOT_COMPLETED,WAKE_LOCK,FOREGROUND_SERVICE
-
-# Support multiple architectures (opsional)
+# Architecture support
 android.archs = armeabi-v7a, arm64-v8a
 
-# Package ke format APK
-package.format = apk
+# Package format
+android.release_artifact = apk
 
-# Jalankan Python di main thread
-android.main = main
+# Additional build options
+android.compile_options = "sourceCompatibility=1.8,targetCompatibility=1.8"
+
+# Skip update check for faster builds
+android.skip_update = False
 
 [buildozer]
 log_level = 2
