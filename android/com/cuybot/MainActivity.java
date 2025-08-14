@@ -1,5 +1,6 @@
 package com.cuybot;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -10,9 +11,7 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends Activity {
 
     private static final String TAG = "MainActivity";
     private static final String BROADCAST_ACTION = "com.cuybot.whatsappnotification";
@@ -41,19 +40,30 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void showPermissionDialog() {
-        new AlertDialog.Builder(this)
-                .setTitle("Permission Required")
-                .setMessage("CuyBot needs notification access to read WhatsApp messages. Please enable it in the next screen.")
-                .setPositiveButton("Grant Permission", (dialog, which) -> {
-                    Intent intent = new Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS);
-                    startActivity(intent);
-                })
-                .setNegativeButton("Cancel", (dialog, which) -> {
-                    Log.w(TAG, "User cancelled permission request");
-                    finish();
-                })
-                .setCancelable(false)
-                .show();
+        try {
+            new AlertDialog.Builder(this)
+                    .setTitle("Permission Required")
+                    .setMessage("CuyBot needs notification access to read WhatsApp messages. Please enable it in the next screen.")
+                    .setPositiveButton("Grant Permission", new android.content.DialogInterface.OnClickListener() {
+                        public void onClick(android.content.DialogInterface dialog, int which) {
+                            Intent intent = new Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS);
+                            startActivity(intent);
+                        }
+                    })
+                    .setNegativeButton("Cancel", new android.content.DialogInterface.OnClickListener() {
+                        public void onClick(android.content.DialogInterface dialog, int which) {
+                            Log.w(TAG, "User cancelled permission request");
+                            finish();
+                        }
+                    })
+                    .setCancelable(false)
+                    .show();
+        } catch (Exception e) {
+            Log.e(TAG, "Error showing permission dialog: " + e.getMessage());
+            // Fallback - just open settings
+            Intent intent = new Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS);
+            startActivity(intent);
+        }
     }
 
     private void setupBroadcastReceiver() {
@@ -81,6 +91,13 @@ public class MainActivity extends AppCompatActivity {
             Log.d(TAG, "BroadcastReceiver registered successfully");
         } catch (Exception e) {
             Log.e(TAG, "Failed to register BroadcastReceiver: " + e.getMessage(), e);
+            // Fallback to basic registration
+            try {
+                registerReceiver(broadcastReceiver, intentFilter);
+                Log.d(TAG, "BroadcastReceiver registered with fallback");
+            } catch (Exception e2) {
+                Log.e(TAG, "Failed fallback registration: " + e2.getMessage());
+            }
         }
     }
 

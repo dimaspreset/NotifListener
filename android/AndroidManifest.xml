@@ -1,32 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     package="com.cuybot">
 
     <!-- Required permissions -->
-    <uses-permission android:name="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE"
-        tools:ignore="ProtectedPermissions" />
+    <uses-permission android:name="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
     <application
         android:allowBackup="true"
-        android:icon="@drawable/icon"
         android:label="CuyBot"
-        android:roundIcon="@drawable/icon"
-        android:supportsRtl="true"
-        android:theme="@android:style/Theme.NoTitleBar"
-        android:hardwareAccelerated="true">
+        android:theme="@android:style/Theme.NoTitleBar">
         
         <!-- Main Activity -->
         <activity
             android:name="com.cuybot.MainActivity"
             android:exported="true"
-            android:screenOrientation="portrait"
-            android:configChanges="keyboardHidden|orientation|screenSize">
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -36,7 +27,6 @@
         <!-- Python Activity (Kivy main activity) -->
         <activity android:name="org.kivy.android.PythonActivity"
             android:label="CuyBot"
-            android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait" />
 
         <!-- Notification Listener Service -->
@@ -44,23 +34,11 @@
             android:name="com.cuybot.WhatsAppNotificationListener"
             android:label="CuyBot Notification Service"
             android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE"
-            android:exported="true"
-            android:enabled="true">
-            <intent-filter android:priority="100">
+            android:exported="true">
+            <intent-filter>
                 <action android:name="android.service.notification.NotificationListenerService" />
             </intent-filter>
         </service>
-
-        <!-- Boot Receiver (optional - to restart service after reboot) -->
-        <receiver 
-            android:name="com.cuybot.BootReceiver"
-            android:enabled="true"
-            android:exported="true">
-            <intent-filter android:priority="1000">
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </receiver>
 
     </application>
 
