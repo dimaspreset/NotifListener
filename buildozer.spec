@@ -17,8 +17,8 @@ main.py = main.py
 # Icon (opsional)
 #icon.filename = %(source.dir)s/data/icon.png
 
-# Requirements - Fixed versions for compatibility
-requirements = python3,kivy==2.1.0,kivymd==1.1.1,pyjnius,android,requests,certifi
+# Requirements - Simplified for compatibility
+requirements = python3,kivy,kivymd,pyjnius,android
 
 # Android settings - More compatible versions
 android.api = 31
@@ -27,13 +27,12 @@ android.ndk = 25b
 android.enable_androidx = True
 android.accept_sdk_license = True
 
-# Firebase dependencies - Fixed format
-android.gradle_dependencies = com.google.firebase:firebase-database:20.2.2, com.google.firebase:firebase-core:21.1.1
-android.gradle_plugins = com.google.gms.google-services
+# Firebase dependencies - Removed for now to avoid build issues
+# android.gradle_dependencies = com.google.firebase:firebase-database:20.2.2, com.google.firebase:firebase-core:21.1.1
+# android.gradle_plugins = com.google.gms.google-services
 
 # Custom Java code and manifest
 android.add_src = ./android
-android.add_jars = ./android/libs/*.jar
 
 # Permissions - Complete list
 android.permissions = INTERNET,BIND_NOTIFICATION_LISTENER_SERVICE,RECEIVE_BOOT_COMPLETED,WAKE_LOCK,FOREGROUND_SERVICE,ACCESS_NETWORK_STATE

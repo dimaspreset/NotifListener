@@ -145,12 +145,9 @@ public class MainActivity extends AppCompatActivity {
 
                 Log.d(TAG, "Valid notification, processing...");
                 
-                // Create Users object and log it (Firebase removed for testing)
+                // Create Users object and log it (no Firebase for now)
                 Users users = new Users(title, text, String.valueOf(receivedNotificationCode));
-                Log.d(TAG, "Created Users object: " + users.toString());
-
-                // For testing, just log the data instead of saving to Firebase
-                Log.i(TAG, "NOTIFICATION DATA: " + users.toString());
+                Log.i(TAG, "NOTIFICATION CAPTURED: " + users.toString());
 
             } catch (Exception e) {
                 Log.e(TAG, "Error in onReceive: " + e.getMessage(), e);
