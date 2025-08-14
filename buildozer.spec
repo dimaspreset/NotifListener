@@ -1,58 +1,61 @@
 [app]
-title = Maps Notification Reader
-package.name = mapsnotificationreader
-package.domain = com.yourpackage
+# Nama aplikasi
+title = CuyBotApp
+package.name = cuybot
+package.domain = com
 
-source.dir = .
-source.include_exts = py,png,jpg,kv,atlas,json
-
+# Versi aplikasi
 version = 0.1
-requirements = python3,kivy==2.1.0,pyjnius==1.4.2,android
 
-# Optimized for ArtemSBulgakov/buildozer-action
-p4a.branch = master
-p4a.bootstrap = sdl2
+# File utama Python kamu
+source.dir = .
+source.include_exts = py,png,jpg,kv,atlas
+
+# Entry point
+main.py = main.py
+
+# Icon (opsional)
+#icon.filename = %(source.dir)s/data/icon.png
+
+# Requirements
+requirements = python=3.8.5,kivy,kivymd,pyjnius,android
+android.api = 33
+android.minapi = 24
+android.ndk = 25b
+android.enable_androidx = True
+
+# Firebase (opsional, kalau mau tetap nyimpen ke Firebase)
+android.gradle_dependencies = com.google.firebase:firebase-database:20.3.0
+
+# Tambahkan Java dan manifest custom
+android.add_src = ./android
+android.manifest_xml = ./android/AndroidManifest.xml
+
+# Orientasi layar
+orientation = portrait
+
+# Presplash screen (opsional)
+#presplash.filename = %(source.dir)s/data/presplash.png
+
+# Jangan optimasi Python agar tetap kompatibel
+# (supaya Pyjnius dan service Java aman)
+android.compile_options = "sourceCompatibility=1.8,targetCompatibility=1.8"
+
+# Permissions (opsional tambahan selain manifest)
+android.permissions = INTERNET,RECEIVE_BOOT_COMPLETED,WAKE_LOCK,FOREGROUND_SERVICE
+
+# Support multiple architectures (opsional)
+android.archs = armeabi-v7a, arm64-v8a
+
+# Package ke format APK
+package.format = apk
+
+# Jalankan Python di main thread
+android.main = main
 
 [buildozer]
 log_level = 2
-warn_on_root = 0
+warn_on_root = 1
 
-[app:android]
-# Permissions
-android.permissions = BIND_NOTIFICATION_LISTENER_SERVICE,WRITE_EXTERNAL_STORAGE,READ_EXTERNAL_STORAGE,INTERNET,WAKE_LOCK,VIBRATE
-
-# API versions (compatible with buildozer-action)
-android.api = 30
-android.minapi = 24
-android.ndk = 23b
-android.sdk = 30
-
-# Gradle settings
-android.accept_sdk_license = True
-android.gradle_repositories = google(), mavenCentral()
-android.gradle = 7.1.1
-
-# Java source directory
-android.add_java_dir = java
-
-# Use custom AndroidManifest template
-android.manifest_template = templates\AndroidManifest.tmpl.xml
-
-# Architecture (optimized for most devices)
-android.archs = arm64-v8a, armeabi-v7a
-
-# PERBAIKAN: Hapus baris ini yang salah
-# android.add_activities = com.yourpackage.notificationreader.MapsNotificationListener
-
-# Tambahkan service dengan benar
-android.add_services = com.yourpackage.mapsnotificationreader.MapsNotificationListener
-
-android.release_artifact = apk
-
-
-# Debug settings
-android.debug = 1
-
-[buildozer:global]
+[log]
 log_level = 2
-warn_on_root = 0

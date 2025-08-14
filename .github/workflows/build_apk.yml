@@ -31,14 +31,6 @@ jobs:
             buildozer-global-${{ hashFiles('buildozer.spec') }}-
             buildozer-global-
 
-      # Clean specific build directories manually
-      - name: Clean build directories
-        run: |
-          echo "Cleaning build directories..."
-          rm -rf .buildozer/android/platform/build
-          rm -rf .buildozer/android/app
-          rm -rf bin/
-          ls -la .buildozer/ || echo "No .buildozer directory yet"
 
       - name: Cache Buildozer local directory
         uses: actions/cache@v4
