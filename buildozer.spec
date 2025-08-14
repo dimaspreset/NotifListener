@@ -18,7 +18,7 @@ main.py = main.py
 #icon.filename = %(source.dir)s/data/icon.png
 
 # Requirements
-requirements = python=3.8.5,kivy,kivymd,pyjnius,android
+requirements = python3,kivy,kivymd,pyjnius,android
 android.api = 33
 android.minapi = 24
 android.ndk = 25b
