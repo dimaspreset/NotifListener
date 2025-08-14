@@ -22,6 +22,7 @@ jobs:
           echo "date=$(/bin/date -u "+%Y%m%d")" >> $GITHUB_OUTPUT
         shell: bash
 
+      # Cache global Buildozer dir
       - name: Cache Buildozer global directory
         uses: actions/cache@v4
         with:
@@ -31,7 +32,7 @@ jobs:
             buildozer-global-${{ hashFiles('buildozer.spec') }}-
             buildozer-global-
 
-
+      # Cache local Buildozer dir
       - name: Cache Buildozer local directory
         uses: actions/cache@v4
         with:
@@ -41,6 +42,16 @@ jobs:
             buildozer-local-${{ runner.os }}-${{ steps.get-date.outputs.date }}-
             buildozer-local-${{ runner.os }}-
 
+      # Clean old build dirs (safe)
+      - name: Clean build directories
+        run: |
+          echo "Cleaning build directories..."
+          [ -d ".buildozer/android/platform/build" ] && rm -rf .buildozer/android/platform/build
+          [ -d ".buildozer/android/app" ] && rm -rf .buildozer/android/app
+          [ -d "bin" ] && rm -rf bin
+          ls -la .buildozer/ || echo "No .buildozer directory yet"
+
+      # Build APK
       - name: Build with Buildozer
         uses: ArtemSBulgakov/buildozer-action@v1
         id: buildozer
@@ -48,6 +59,7 @@ jobs:
           command: buildozer android release
           buildozer_version: stable
 
+      # Upload APK
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
@@ -55,10 +67,4 @@ jobs:
           path: ${{ steps.buildozer.outputs.filename }}
           retention-days: 30
 
-      - name: Show APK info
-        run: |
-          echo "APK built successfully!"
-          echo "Filename: ${{ steps.buildozer.outputs.filename }}"
-          if [ -f "${{ steps.buildozer.outputs.filename }}" ]; then
-            echo "Size: $(du -h "${{ steps.buildozer.outputs.filename }}" | cut -f1)"
-          fi
+      
